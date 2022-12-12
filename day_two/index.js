@@ -26,6 +26,9 @@ function main() {
     const inputArr = fileAsString.split('\n');
 
     return inputArr.reduce((sum, gameString) => {
+        if (!/[ABC] [XYZ]/.test(gameString)) {
+            return sum;
+        }
         const [oppShape, playerShape] = gameString.split(' ');
         const outcome = playRound(oppShape, playerShape);
         return sum + scoreRound(playerShape, outcome);
