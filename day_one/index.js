@@ -16,7 +16,13 @@ function main() {
         };
         currentElf += n;
     };
-    return Math.max.apply(null, elfCal);
+    let topElf = Math.max.apply(null, elfCal)
+    let topThree = elfCal.sort((a, b) => a < b ? 1 : -1 ).slice(0,3);
+    //console.log(topElves.slice(0, 3));
+    console.log(topThree.reduce((sum, value) => {
+        return sum + value;
+    }))
+    return topElf;
 };
 console.log(main());
 
