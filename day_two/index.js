@@ -16,8 +16,14 @@ const PLAYER_ROCK = 'X';
 const PLAYER_PAPER = 'Y';
 const PLAYER_SCISSORS = 'Z';
 
+const OUTCOME_LOSE = 'X';
+const OUTCOME_DRAW = 'Y';
+const OUTCOME_WIN = 'Z';
+
 const result = main();
 console.log(result);
+
+
 
 function main() {
     const inputPath = process.argv[2];
@@ -29,9 +35,10 @@ function main() {
         if (!/[ABC] [XYZ]/.test(gameString)) {
             return sum;
         }
-        const [oppShape, playerShape] = gameString.split(' ');
-        const outcome = playRound(oppShape, playerShape);
-        return sum + scoreRound(playerShape, outcome);
+        const [oppShape, desiredOutcome] = gameString.split(' ');
+        const move = pickMove(oppShape, desiredOutcome)
+        const outcome = playRound(oppShape, move);
+        return sum + scoreRound(move, outcome);
     }, 0);
 }
 
@@ -48,6 +55,29 @@ function playRound(opponentShape, playerShape) {
     if (opponentShape === OPP_SCISSORS) {
         return playerShape === PLAYER_ROCK ? 'win' : 'lose';
     }
+}
+
+
+function pickMove(opponentShape, desiredOutcome) {
+    const moveMap = {
+        [OPP_ROCK]: {
+            [OUTCOME_LOSE]: PLAYER_SCISSORS,
+            [OUTCOME_DRAW]: PLAYER_ROCK,
+            [OUTCOME_WIN]: PLAYER_PAPER
+        },
+        [OPP_PAPER]: {
+            [OUTCOME_LOSE]: PLAYER_ROCK,
+            [OUTCOME_DRAW]: PLAYER_PAPER,
+            [OUTCOME_WIN]: PLAYER_SCISSORS
+        },
+        [OPP_SCISSORS]: {
+            [OUTCOME_LOSE]: PLAYER_PAPER,
+            [OUTCOME_DRAW]: PLAYER_SCISSORS,
+            [OUTCOME_WIN]: PLAYER_ROCK
+        }
+    }
+
+    return moveMap[opponentShape][desiredOutcome]
 }
 
 function translateShapeToPlayerShape(shape) {
