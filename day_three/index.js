@@ -25,23 +25,30 @@ function findTotalBadgePriority() {
     let priorityTotal = 0;
     const remainingElfPacks = [...elfPacks];
     while(remainingElfPacks.length > 0 && remainingElfPacks.length >= 3) {
-        const packs = [remainingElfPacks.shift(), remainingElfPacks.shift(), remainingElfPacks.shift()];
-        let matchArr = packs[0].split('');
-        for(let pack of packs.slice(1)) {
-            for (let charIndex = 0; charIndex < pack.length; charIndex++) {
-                const searchLetter = pack[charIndex];
-                if(matchArr.indexOf(searchLetter) === -1){
-                    matchArr = matchArr.filter(e => e !== searchLetter);
-                }
+        const packs = [stringToSet(remainingElfPacks.shift()), stringToSet(remainingElfPacks.shift()), stringToSet(remainingElfPacks.shift())];
+        const allChars = packs.reduce((all, pack) => {
+            for (const char of pack.values()) {
+                all.add(char);
             }
-            if(matchArr.length === 1){
-                const letterPriority = prioritization(matchArr[0]);
-                priorityTotal += letterPriority;
-                break;
-            }
+            return all;
+        }, new Set());
+        const uniqueSharedLetters = Array.from(allChars.values()).filter((char) => {
+            return packs.every((pack) => pack.has(char));
+        });
+        if (uniqueSharedLetters.length !== 1) {
+            throw new Error(`More than one (or zero) unique char ${uniqueSharedLetters.join(',')}`);
         }
+        priorityTotal += prioritization(uniqueSharedLetters[0]);
     }
     return priorityTotal;
+}
+
+function stringToSet(str) {
+    const set = new Set();
+    for (let char of str) {
+        set.add(char);
+    }
+    return set;
 }
 
 //console.log(findTotalPriority());
