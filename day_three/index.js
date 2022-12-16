@@ -7,6 +7,7 @@ function main() {
         const divIndex = line.length / 2;
         const firstHalf = line.substring(0, divIndex);
         const secondHalf = line.substring(divIndex);
+        const compareArr = [];
         for (let charIndex = 0; charIndex < firstHalf.length; charIndex++) {
             const searchLetter = firstHalf[charIndex];
             if(secondHalf.indexOf(searchLetter) >= 0) {
@@ -16,6 +17,7 @@ function main() {
                 break;
             }
         }
+        console.log(priorityTotal);
     }
     return priorityTotal;
 }
@@ -24,7 +26,7 @@ console.log(main());
 
 function prioritization(letter) {
     const charNum = letter.charCodeAt(0);
-    const offset = charNum > 90 ? 96 : 69;
+    const offset = charNum > 90 ? 96 : 38;
     return charNum - offset;
 }
 
