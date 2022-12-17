@@ -10,7 +10,10 @@ function main() {
         const [rangeStrA, rangeStrB] = line.split(',');
         const rangeA = convertRangeStringToRange(rangeStrA);
         const rangeB = convertRangeStringToRange(rangeStrB);
-        if (rangeIsFullyInclusive(rangeA, rangeB)) {
+        // if (rangeIsFullyInclusive(rangeA, rangeB)) {
+        //     totalInclusivePairs++;
+        // }
+        if (rangesOverlap(rangeA, rangeB)) {
             totalInclusivePairs++;
         }
     }
@@ -20,6 +23,12 @@ function main() {
 
 function rangeIsFullyInclusive(rangeA: Range, rangeB: Range): boolean {
     return isRangeFullyInclusive(rangeA, ...rangeB) || isRangeFullyInclusive(rangeB, ...rangeA);
+}
+
+function rangesOverlap(rangeA: Range, rangeB: Range): boolean {
+    const [aMin, aMax] = rangeA;
+    const [bMin, bMax] = rangeB;
+    return (aMax >= bMin || bMin <= aMax) && (bMax >= aMin || aMin <= bMax);
 }
 
 /**
